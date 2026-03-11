@@ -1,6 +1,11 @@
 from fastapi import HTTPException, status
 import pandas as pd
 import numpy as np
+from pathlib import Path
+
+from App.services.save_datasets import save_datasets
+
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 def get_datasets_info(file):
 
@@ -46,6 +51,7 @@ def get_datasets_info(file):
     no_unique = df.nunique().to_dict()
 
     return {
+        "dataset_id": save_datasets(file),
         "columns": columns,
         "columns_type": columns_type,
         "data_set_head": data_set_head,
