@@ -50,6 +50,8 @@ def get_datasets_info(file):
 
     no_unique = df.nunique().to_dict()
 
+    file.file.seek(0)
+
     return {
         "dataset_id": save_datasets(file),
         "columns": columns,

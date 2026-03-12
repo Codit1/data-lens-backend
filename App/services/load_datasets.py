@@ -2,13 +2,11 @@ from fastapi import HTTPException, status
 import pandas as pd
 from pathlib import Path
 
-
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 def load_dataset(dataset_id: str):
 
-    files = BASE_DIR.glob(f"datasets/{dataset_id}*")
+    files = list(BASE_DIR.glob(f"datasets/{dataset_id}*"))
 
     if not files:
         raise HTTPException(
@@ -34,5 +32,3 @@ def load_dataset(dataset_id: str):
         )
 
     return df
-
-

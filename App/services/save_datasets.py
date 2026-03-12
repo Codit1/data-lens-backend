@@ -1,32 +1,45 @@
 import uuid
 import time
+import shutil
 from pathlib import Path
 from fastapi import HTTPException, status
-import pandas as pd
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
 def generating_uniqueID():
-    timestamp = str(int(time.time()))[-6:]  # Last 6 digits of timestamp
-    short_uuid = str(uuid.uuid4().hex[:8])  # First 8 characters of UUID
+    timestamp = str(int(time.time()))[-6:]
+    short_uuid = uuid.uuid4().hex[:8]
     return f"{timestamp}{short_uuid}"
+
 
 def save_datasets(dataset):
 
     dataset_id = generating_uniqueID()
 
-    if dataset.filename.endswith(".csv"):
-        file_path = BASE_DIR / "datasets" / f"{dataset_id}.csv"
+    dataset_dir = BASE_DIR / "datasets"
+    dataset_dir.mkdir(exist_ok=True)
 
-    elif dataset.filename.endswith((".xlsx", ".xls")):
-        file_path = BASE_DIR / "datasets" / f"{dataset_id}.xlsx"
+    filename = dataset.filename.lower()
 
-    elif dataset.filename.endswith(".json"):
-        file_path = BASE_DIR / "datasets" / f"{dataset_id}.json"
+    if filename.endswith(".csv"):
+        file_path = dataset_dir / f"{dataset_id}.csv"
 
-    with open(file_path, "wb") as f:
-        f.write(dataset.file.read())
+    elif filename.endswith((".xlsx", ".xls")):
+        file_path = dataset_dir / f"{dataset_id}.xlsx"
+
+    elif filename.endswith(".json"):
+        file_path = dataset_dir / f"{dataset_id}.json"
+
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+            detail="Unsupported dataset format"
+        )
+
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(dataset.file, buffer)
 
     return dataset_id
 

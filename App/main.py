@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from App.Api import upload, search
+from App.Api import upload, search, columns
 
 app = FastAPI()
 
@@ -9,4 +9,5 @@ async def root():
 
 app.include_router(upload.router)
 app.include_router(search.router)
+app.include_router(columns.router)
 
