@@ -7,7 +7,7 @@ from App.services.load_datasets import load_dataset
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-def search_by_column(dataset_id: str, column: str, query: str, page: int =1, limit: int=50):
+def search_by_column(dataset_id: str, column: str, query: str, page: int =1, limit: int=100):
     
     try:
         df = load_dataset(dataset_id)
@@ -36,7 +36,7 @@ def search_by_column(dataset_id: str, column: str, query: str, page: int =1, lim
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     
 
-def search_all_dataset(dataset_id: str, query: str, page: int =1, limit: int=50):
+def search_all_dataset(dataset_id: str, query: str, page: int =1, limit: int=100):
 
 
     try:

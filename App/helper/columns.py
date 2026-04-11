@@ -13,6 +13,9 @@ def get_column_info(dataset_id: str, column: str, ):
 
     col = df[column]
 
+    if not column in df.columns:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Column not found")
+
     profile = {
         "column_name": column,
         "dtype": str(col.dtype),
@@ -57,4 +60,18 @@ def get_column_info(dataset_id: str, column: str, ):
 
     return profile
 
+# func to get columns value for pagination 
+def get_columns_values(dataset_id: str, column: str, page: int =1, limit: int=100):
+    df = load_dataset(dataset_id)
 
+    col = df[column]
+
+    if not column in df.columns:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Column not found")
+    
+    start = (page - 1) * limit
+    end = start + limit
+    
+    result = df[column].dropna().tolist()[start:end]
+
+    return result
