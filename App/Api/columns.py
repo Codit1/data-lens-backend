@@ -8,6 +8,6 @@ router = APIRouter(prefix="/datalens")
 def get_columns_info(dataset_id: str, column: str):
     return get_column_info(dataset_id, column)
 
-@router.get("columns/pagination/{dataset_id}/{column}/{page}/{limit}")
+@router.get("/columns/pagination/{dataset_id}/{column}/{page}/{limit}")
 def get_columns_values_pagination(dataset_id: str, column: str, page: int, limit: int):
     return get_columns_values(dataset_id, column, page, limit)
