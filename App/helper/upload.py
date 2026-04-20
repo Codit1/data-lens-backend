@@ -248,5 +248,10 @@ def get_dataset_values(dataset_id: str, page: int =1, limit: int=100):
 
     result = df.iloc[start:end]
 
+    result = result.replace(
+        [np.nan, np.inf, -np.inf],
+        None
+    )
+
 
     return result.to_dict(orient="records")
